@@ -1,11 +1,14 @@
-import { Inter } from "next/font/google";
-import HomeFeatures from "@/features/home";
-const inter = Inter({ subsets: ["latin"] });
+import ProductsFeatures from "@/features/products";
+import { DashboardLayout } from "@/components/layouts";
 
-export default function Home() {
+export default function Products() {
   return (
     <>
-      <HomeFeatures/>
+      <ProductsFeatures />
     </>
   );
 }
+
+Products.getLayout = function getLayout(page) {
+  return <DashboardLayout>{page}</DashboardLayout>;
+};

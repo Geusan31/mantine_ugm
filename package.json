@@ -11,9 +11,11 @@
   "dependencies": {
     "@emotion/server": "^11.11.0",
     "@mantine/core": "6.0.21",
+    "@mantine/ds": "^6.0.21",
     "@mantine/hooks": "6.0.21",
     "@mantine/next": "^6.0.21",
     "@mantine/notifications": "^6.0.17",
+    "@tabler/icons-react": "^2.23.0",
     "@tanstack/react-query": "^4.36.1",
     "axios": "^1.5.1",
     "mantine-datatable": "^6.0.0",
