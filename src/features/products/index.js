@@ -1,11 +1,14 @@
 import { useQueryProdutcts } from "./service";
-import { Table, ScrollArea, UnstyledButton, Group, Text, Center, TextInput, rem, keys } from "@mantine/core";
+import { Table, ScrollArea, UnstyledButton, Group, Text, Center, TextInput, rem, keys, Button } from "@mantine/core";
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from "@tabler/icons-react";
 import classes from "./table.module.css";
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
+import { Buttons } from "@/components/button";
+import { useRouter } from "next/router";
 
 const ProductsFeatures = () => {
+  const router = useRouter();
   const { data, isFetching } = useQueryProdutcts(0);
   const products = data?.data.products;
   console.log(products, isFetching);
@@ -41,44 +44,51 @@ const ProductsFeatures = () => {
     </tr>
   ));
 
+  const tambahPage = () => {
+    router.push("/tambah");
+  };
+
   return (
-    <ScrollArea>
-      <TextInput placeholder="Search by any field" mb="md" leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />} value={search} onChange={handleSearchChange} />
-      <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
-        <tbody>
-          <tr>
-            <Th sorted={sortBy === "title"} reversed={reverseSortDirection} onSort={() => setSorting("title")}>
-              Title
-            </Th>
-            <Th sorted={sortBy === "description"} reversed={reverseSortDirection} onSort={() => setSorting("description")}>
-              Description
-            </Th>
-            <Th sorted={sortBy === "category"} reversed={reverseSortDirection} onSort={() => setSorting("category")}>
-              Category
-            </Th>
-            <Th sorted={sortBy === "createdAt"} reversed={reverseSortDirection} onSort={() => setSorting("createdAT")}>
-              Created At
-            </Th>
-            <Th sorted={sortBy === "updatedAt"} reversed={reverseSortDirection} onSort={() => setSorting("updatedAt")}>
-              Updated At
-            </Th>
-          </tr>
-        </tbody>
-        <tbody>
-          {rows?.length > 0 ? (
-            rows
-          ) : (
+    <>
+      <Buttons onClick={tambahPage}>Tambah Data</Buttons>
+      <ScrollArea>
+        <TextInput placeholder="Search by any field" mb="md" leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />} value={search} onChange={handleSearchChange} />
+        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+          <tbody>
             <tr>
-              <td colSpan={!isFetching ? Object.keys(products[0]).length : ""}>
-                <Center>
-                  <Loading />
-                </Center>
-              </td>
+              <Th sorted={sortBy === "title"} reversed={reverseSortDirection} onSort={() => setSorting("title")}>
+                Title
+              </Th>
+              <Th sorted={sortBy === "description"} reversed={reverseSortDirection} onSort={() => setSorting("description")}>
+                Description
+              </Th>
+              <Th sorted={sortBy === "category"} reversed={reverseSortDirection} onSort={() => setSorting("category")}>
+                Category
+              </Th>
+              <Th sorted={sortBy === "createdAt"} reversed={reverseSortDirection} onSort={() => setSorting("createdAT")}>
+                Created At
+              </Th>
+              <Th sorted={sortBy === "updatedAt"} reversed={reverseSortDirection} onSort={() => setSorting("updatedAt")}>
+                Updated At
+              </Th>
             </tr>
-          )}
-        </tbody>
-      </Table>
-    </ScrollArea>
+          </tbody>
+          <tbody>
+            {rows?.length > 0 ? (
+              rows
+            ) : (
+              <tr>
+                <td colSpan={!isFetching ? Object.keys(products[0]).length : ""}>
+                  <Center>
+                    <Loading />
+                  </Center>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </ScrollArea>
+    </>
   );
 };
 
