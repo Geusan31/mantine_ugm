@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getProduct } from "../query";
+import { getProducts } from "@/common/query/query";
 
 const useQueryProdutcts = (skip, options) => {
 
 return useQuery(
     [`get-produccts`, { skip }],
-    () => getProduct(skip),{
+    () => getProducts(skip),{
         ...options
     }
 );

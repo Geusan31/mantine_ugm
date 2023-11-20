@@ -1,6 +1,25 @@
 import { useQueryProdutcts } from "./service";
-import { Table, ScrollArea, UnstyledButton, Group, Text, Center, TextInput, rem, keys, Button } from "@mantine/core";
-import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from "@tabler/icons-react";
+import {
+  Table,
+  ScrollArea,
+  UnstyledButton,
+  Group,
+  Text,
+  Center,
+  TextInput,
+  rem,
+  keys,
+  Button,
+  ActionIcon,
+} from "@mantine/core";
+import {
+  IconSelector,
+  IconChevronDown,
+  IconChevronUp,
+  IconSearch,
+  IconEdit,
+  IconTrash,
+} from "@tabler/icons-react";
 import classes from "./table.module.css";
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
@@ -18,7 +37,9 @@ const ProductsFeatures = () => {
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
   useEffect(() => {
-    setSortedData(sortData(products, { sortBy, reversed: reverseSortDirection, search }));
+    setSortedData(
+      sortData(products, { sortBy, reversed: reverseSortDirection, search })
+    );
   }, [products, reverseSortDirection, search, sortBy]);
 
   const setSorting = (field) => {
@@ -31,7 +52,13 @@ const ProductsFeatures = () => {
   const handleSearchChange = (event) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedData(sortData(products, { sortBy, reversed: reverseSortDirection, search: value }));
+    setSortedData(
+      sortData(products, {
+        sortBy,
+        reversed: reverseSortDirection,
+        search: value,
+      })
+    );
   };
 
   const rows = sortedData?.map((row) => (
@@ -41,6 +68,19 @@ const ProductsFeatures = () => {
       <td>{row.category}</td>
       <td>{row.createdAt}</td>
       <td>{row.updatedAt}</td>
+      <td>
+        <Group spacing={4} position="center" noWrap>
+          <ActionIcon color="blue" onClick={() => onHandleEditData(true, data)}>
+            <IconEdit size={16} />
+          </ActionIcon>
+          <ActionIcon
+            color="red"
+            onClick={() => onHandleDeleteData(true, data.id)}
+          >
+            <IconTrash size={16} />
+          </ActionIcon>
+        </Group>
+      </td>
     </tr>
   ));
 
@@ -52,25 +92,62 @@ const ProductsFeatures = () => {
     <>
       <Buttons onClick={tambahPage}>Tambah Data</Buttons>
       <ScrollArea>
-        <TextInput placeholder="Search by any field" mb="md" leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />} value={search} onChange={handleSearchChange} />
-        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+        <TextInput
+          placeholder="Search by any field"
+          mb="md"
+          leftSection={
+            <IconSearch
+              style={{ width: rem(16), height: rem(16) }}
+              stroke={1.5}
+            />
+          }
+          value={search}
+          onChange={handleSearchChange}
+        />
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={700}
+          layout="fixed"
+        >
           <tbody>
             <tr>
-              <Th sorted={sortBy === "title"} reversed={reverseSortDirection} onSort={() => setSorting("title")}>
+              <Th
+                sorted={sortBy === "title"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("title")}
+              >
                 Title
               </Th>
-              <Th sorted={sortBy === "description"} reversed={reverseSortDirection} onSort={() => setSorting("description")}>
+              <Th
+                sorted={sortBy === "description"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("description")}
+              >
                 Description
               </Th>
-              <Th sorted={sortBy === "category"} reversed={reverseSortDirection} onSort={() => setSorting("category")}>
+              <Th
+                sorted={sortBy === "category"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("category")}
+              >
                 Category
               </Th>
-              <Th sorted={sortBy === "createdAt"} reversed={reverseSortDirection} onSort={() => setSorting("createdAT")}>
+              <Th
+                sorted={sortBy === "createdAt"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("createdAt")}
+              >
                 Created At
               </Th>
-              <Th sorted={sortBy === "updatedAt"} reversed={reverseSortDirection} onSort={() => setSorting("updatedAt")}>
+              <Th
+                sorted={sortBy === "updatedAt"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("updatedAt")}
+              >
                 Updated At
               </Th>
+              <Th>Aksi</Th>
             </tr>
           </tbody>
           <tbody>
@@ -78,7 +155,9 @@ const ProductsFeatures = () => {
               rows
             ) : (
               <tr>
-                <td colSpan={!isFetching ? Object.keys(products[0]).length : ""}>
+                <td
+                  colSpan={!isFetching ? Object.keys(products[0]).length : ""}
+                >
                   <Center>
                     <Loading />
                   </Center>
@@ -95,7 +174,11 @@ const ProductsFeatures = () => {
 export default ProductsFeatures;
 
 function Th({ children, reversed, sorted, onSort }) {
-  const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
+  const Icon = sorted
+    ? reversed
+      ? IconChevronUp
+      : IconChevronDown
+    : IconSelector;
   return (
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
@@ -114,7 +197,12 @@ function Th({ children, reversed, sorted, onSort }) {
 
 function filterData(data, search) {
   const query = search.toLowerCase().trim();
-  return data?.filter((item) => Object.keys(data[0]).some((key) => typeof item[key] === "string" && item[key].toLowerCase().includes(query)));
+  return data?.filter((item) =>
+    Object.keys(data[0]).some(
+      (key) =>
+        typeof item[key] === "string" && item[key].toLowerCase().includes(query)
+    )
+  );
 }
 
 function sortData(data, payload) {
